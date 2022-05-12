@@ -6,10 +6,14 @@ import com.ericlam.mc.eld.ServiceCollection;
 import com.ericlam.mc.eld.annotations.ELDPlugin;
 import com.ericlam.mc.eldgui.MVCInstallation;
 import org.dragonitemc.dragonshop.api.ShopService;
+import org.dragonitemc.dragonshop.api.ShopTaskService;
 import org.dragonitemc.dragonshop.config.GUITemplate;
 import org.dragonitemc.dragonshop.config.Shop;
 import org.dragonitemc.dragonshop.controller.ShopController;
 import org.dragonitemc.dragonshop.services.ShopManager;
+import org.dragonitemc.dragonshop.services.ShopTaskManager;
+
+import java.util.List;
 
 @ELDPlugin(
     lifeCycle = DragonShopLifeCycle.class,
@@ -24,8 +28,10 @@ public class DragonShop extends ELDBukkitPlugin {
         collection.addGroupConfiguration(Shop.class);
 
         collection.bindService(ShopService.class, ShopManager.class);
+        collection.bindService(ShopTaskService.class, ShopTaskManager.class);
 
         mvc.registerControllers(ShopController.class);
+        mvc.addExceptionViewHandlers(List.of(ShopViewExceptionHandler.class));
     }
 
     @Override
