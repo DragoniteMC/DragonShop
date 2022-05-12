@@ -1,0 +1,20 @@
+name: "可以分頁的 {name} 商店"
+rows: 6
+pattern:
+  - AAAAAAAAA
+  - AAAAAAAAA
+  - AAAAAAAAA
+  - AAAAAAAAA
+  - AAAAAAAAA
+  - BAAAAAAAC
+items:
+  A:
+    cancelMove: true
+  B:
+    material: APPLE
+    name: "上一頁"
+    cancelMove: true
+  C:
+    material: APPLE
+    name: "下一頁"
+    cancelMove: true

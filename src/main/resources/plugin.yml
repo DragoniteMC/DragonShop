@@ -1,0 +1,5 @@
+name: DragonShop
+version: ${project.version}
+main: org.dragonitemc.dragonshop.DragonShop
+depend:
+  - ELDependenci-MVC

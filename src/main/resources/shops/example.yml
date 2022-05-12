@@ -1,0 +1,14 @@
+name: "範例"
+viewType: "two-line"
+shopItems:
+  - name: "指令"
+    material: DIAMOND_SWORD
+    lore:
+      - "點擊後會獎勵一把鑽石劍"
+    rewards:
+      LEFT:
+        rewardType: command
+        reward:
+          - give {player} minecraft:diamond_sword
+        priceType: wrld
+        price: 1

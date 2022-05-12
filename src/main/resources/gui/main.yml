@@ -1,0 +1,17 @@
+name: "Main View"
+rows: 1
+pattern:
+  - ZZZZAZZZZ
+items:
+  A:
+    # 因為顯示數據來自 Controller, 因此在這裏不會實作物品
+    # 但需要指明取消移動
+    cancelMove: true
+  Z:
+    # 其餘位置填滿黑色玻璃
+    material: BLACK_STAINED_GLASS_PANE
+    name: "&c這裏什麼都沒有"
+    lore:
+      - "&e這個物品"
+      - "&e只是裝飾"
+    cancelMove: true

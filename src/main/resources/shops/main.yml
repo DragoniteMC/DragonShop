@@ -1,0 +1,32 @@
+name: "Main View"
+rows: 1
+pattern:
+  - ABZZZZZZ
+items:
+  A:
+    material: BLACK_STAINED_GLASS_PANE
+    name: "&e機槍手"
+    lore:
+      - "擁有彈藥量最多的兵種。每輪有100發。"
+      - "火力強大，可惜M249的重載時間需要六秒左右...."
+      - "精準度頗高。"
+    priceType: wrld
+    price: 100
+    rewardType: command
+    reward: ""
+    cancelMove: true
+    message: "&a商店// &7已成功購買。"
+  B:
+    material: BLACK_STAINED_GLASS_PANE
+    name: "&e幽靈獵手"
+    lore:
+      - "擁有比起一般兵種更加強大的免疫能力，攻擊能力。"
+      - "被賦予專斬擊生化幽靈的獵殺之劍，攻擊力異常強大。"
+      - "由於免疫與力量強大，因此不需配備槍械。"
+      - "對於鐵巨人生化幽靈需要多位幽靈獵手聯合攻擊。"
+    priceType: wrld
+    price: 100
+    rewardType: command
+    reward: ""
+    cancelMove: true
+    message: "&a商店// &7已成功購買。"
