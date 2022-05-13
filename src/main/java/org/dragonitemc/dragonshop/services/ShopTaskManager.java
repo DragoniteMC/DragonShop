@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.dragonitemc.dragonshop.DragonShop;
 import org.dragonitemc.dragonshop.ShopException;
 import org.dragonitemc.dragonshop.api.*;
+import org.dragonitemc.dragonshop.config.DragonShopMessage;
 import org.dragonitemc.dragonshop.config.Shop;
 
 import javax.annotation.Nullable;
@@ -16,6 +17,9 @@ public class ShopTaskManager implements ShopTaskService {
 
     @Inject
     private DragonShop plugin;
+
+    @Inject
+    private DragonShopMessage message;
 
     @Inject
     private ScheduleService scheduleService;
@@ -55,10 +59,9 @@ public class ShopTaskManager implements ShopTaskService {
 
         var resultTask = purchaseTask.thenRunSync(purchaseResult -> {
             if (purchaseResult.isSuccess()){
-                // 之後再改
-                player.sendMessage("Purchase Successful");
+                player.sendMessage(message.getLang().get("purchase-success"));
             }else{
-                player.sendMessage("Purchase Failed: " + purchaseResult.getMessage());
+                player.sendMessage(message.getLang().get("purchase-failed", purchaseResult.getMessage()));
             }
         });
 

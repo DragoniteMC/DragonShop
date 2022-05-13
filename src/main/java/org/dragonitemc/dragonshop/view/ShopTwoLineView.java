@@ -21,7 +21,7 @@ public class ShopTwoLineView implements View<Shop> {
                     .component(
                             entry.getValue().slot,
                             button.icon(entry.getValue().material)
-                                    .bind("name", entry.getValue().name)
+                                    .bind("name", entry.getKey())
                                     .title(entry.getValue().name)
                                     .lore(entry.getValue().lore.toArray(String[]::new))
                                     .create()
@@ -32,7 +32,7 @@ public class ShopTwoLineView implements View<Shop> {
             context.pattern('A')
                     .components(
                             button.icon(entry.getValue().material)
-                                    .bind("name", entry.getValue().name)
+                                    .bind("name", entry.getKey())
                                     .title(entry.getValue().name)
                                     .lore(entry.getValue().lore.toArray(String[]::new))
                                     .create()

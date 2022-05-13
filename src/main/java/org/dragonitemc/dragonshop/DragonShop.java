@@ -7,6 +7,7 @@ import com.ericlam.mc.eld.annotations.ELDPlugin;
 import com.ericlam.mc.eldgui.MVCInstallation;
 import org.dragonitemc.dragonshop.api.ShopService;
 import org.dragonitemc.dragonshop.api.ShopTaskService;
+import org.dragonitemc.dragonshop.config.DragonShopMessage;
 import org.dragonitemc.dragonshop.config.GUITemplate;
 import org.dragonitemc.dragonshop.config.Shop;
 import org.dragonitemc.dragonshop.controller.ShopController;
@@ -24,6 +25,7 @@ public class DragonShop extends ELDBukkitPlugin {
     @Override
     protected void bindServices(ServiceCollection collection) {
         MVCInstallation mvc = collection.getInstallation(MVCInstallation.class);
+        collection.addConfiguration(DragonShopMessage.class);
         collection.addGroupConfiguration(GUITemplate.class);
         collection.addGroupConfiguration(Shop.class);
 

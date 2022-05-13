@@ -1,3 +1,3 @@
-prefix: "DragonShop//"
+prefix: "&aDragonShop// &7"
 purchase-success: "Purchase successful!"
-purchase-failed: "Purchase failed."
+purchase-failed: "Purchase failed: {0}"
