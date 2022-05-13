@@ -3,13 +3,10 @@ package org.dragonitemc.dragonshop;
 import com.ericlam.mc.eldgui.UISession;
 import com.ericlam.mc.eldgui.exception.ExceptionViewHandler;
 import com.ericlam.mc.eldgui.exception.HandleException;
-import com.ericlam.mc.eldgui.exception.HandleForControllers;
 import com.ericlam.mc.eldgui.view.BukkitView;
 import org.bukkit.entity.Player;
-import org.dragonitemc.dragonshop.controller.ShopController;
 import org.dragonitemc.dragonshop.view.ShopErrorView;
 
-@HandleForControllers(ShopController.class)
 public class ShopViewExceptionHandler implements ExceptionViewHandler {
 
     @Override

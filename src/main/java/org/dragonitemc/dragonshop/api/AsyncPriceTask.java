@@ -1,7 +1,8 @@
 package org.dragonitemc.dragonshop.api;
 
-import com.ericlam.mc.eld.services.ScheduleService;
 import org.bukkit.entity.Player;
+
+import java.util.concurrent.CompletableFuture;
 
 public abstract class AsyncPriceTask<T> extends PriceTask<T> {
 
@@ -14,6 +15,6 @@ public abstract class AsyncPriceTask<T> extends PriceTask<T> {
         throw new UnsupportedOperationException("you must use async methods");
     }
 
-    public abstract ScheduleService.BukkitPromise<PurchaseResult> doPurchaseAsync(T content, Player player);
+    public abstract CompletableFuture<PurchaseResult> doPurchaseAsync(T content, Player player);
 
 }

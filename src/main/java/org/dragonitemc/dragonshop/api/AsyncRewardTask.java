@@ -1,7 +1,8 @@
 package org.dragonitemc.dragonshop.api;
 
-import com.ericlam.mc.eld.services.ScheduleService;
 import org.bukkit.entity.Player;
+
+import java.util.concurrent.CompletableFuture;
 
 public abstract class AsyncRewardTask<T> extends RewardTask<T> {
 
@@ -15,6 +16,6 @@ public abstract class AsyncRewardTask<T> extends RewardTask<T> {
     }
 
 
-    public abstract ScheduleService.BukkitPromise<Void> giveRewardAsync(T content, Player player);
+    public abstract CompletableFuture<Void> giveRewardAsync(T content, Player player);
 
 }

@@ -5,7 +5,7 @@ import com.ericlam.mc.eldgui.InventoryTemplate;
 
 @GroupResource(
         folder = "gui",
-        preloads = {"main", "one-line", "two-line"}
+        preloads = {"pageable"}
 )
 public class GUITemplate extends InventoryTemplate {
 }

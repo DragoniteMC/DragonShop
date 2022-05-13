@@ -17,9 +17,8 @@ import java.util.Map;
 public class Shop extends GroupConfiguration {
 
     // 商店名稱
-    public String name = "";
-
-    public String viewType = "";
+    public String title = "Unknown Title";
+    public String guiType = "normal";
 
     // 商店物品列表
     public Map<String, ShopItemInfo> shopItems = new HashMap<>();
@@ -33,6 +32,8 @@ public class Shop extends GroupConfiguration {
         public int slot;
 
         public int amount;
+
+        public String toShop;
 
         public Map<ClickType, RewardInfo> rewards = new HashMap<>();
 

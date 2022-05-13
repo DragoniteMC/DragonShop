@@ -1,4 +1,4 @@
-name: "可以分頁的 {name} 商店"
+name: "{title}"
 rows: 6
 pattern:
   - AAAAAAAAA
@@ -6,15 +6,17 @@ pattern:
   - AAAAAAAAA
   - AAAAAAAAA
   - AAAAAAAAA
-  - BAAAAAAAC
+  - BDDDZDDDC
 items:
   A:
     cancelMove: true
   B:
-    material: APPLE
-    name: "上一頁"
-    cancelMove: true
+    material: ARROW
+    name: "&e上一頁"
   C:
-    material: APPLE
-    name: "下一頁"
+    material: ARROW
+    name: "&e下一頁"
+  Z: # 顯示頁面資訊
     cancelMove: true
+  D:
+    material: BLACK_STAINED_GLASS_PANE

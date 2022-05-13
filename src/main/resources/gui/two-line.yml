@@ -1,8 +1,0 @@
-name: "只有 2 行的 ${name} 商店"
-rows: 2
-pattern:
-  - AAAAAAAAA
-  - AAAAAAAAA
-items:
-  A:
-    cancelMove: true

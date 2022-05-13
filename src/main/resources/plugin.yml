@@ -4,3 +4,5 @@ main: org.dragonitemc.dragonshop.DragonShop
 api-version: "1.18"
 depend:
   - ELDependenci-MVC
+  - PlaceholderAPI
+  - LuckPerms

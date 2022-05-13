@@ -1,0 +1,42 @@
+title: "普通商店"
+guiType: "normal"
+shopItems:
+  test:
+    name: "發送訊息"
+    material: "APPLE"
+    lore:
+      - "左鍵發送 hello, 右鍵發送 good bye"
+    rewards:
+      LEFT:
+        rewardType: message
+        reward:
+          - "hello"
+      RIGHT:
+        rewardType: message
+        reward:
+          - "good bye"
+  test2:
+    name: "給予權限"
+    material: "DIAMOND"
+    lore:
+      - "左鍵給予 xyz.test 權限, 右鍵提取 xyz.test 權限"
+    prices:
+      RIGHT:
+        priceType: take-permission
+        price:
+          - "xyz.test"
+    rewards:
+      LEFT:
+        rewardType: permission
+        reward:
+          - "xyz.test"
+      RIGHT:
+        rewardType: message
+        reward:
+          - "已提取你的 xyz.test 權限"
+  test3:
+    name: "跳轉到商店 example1"
+    material: "EMERALD"
+    lore:
+      - "點擊跳轉到商店 example1"
+    toShop: "example1"

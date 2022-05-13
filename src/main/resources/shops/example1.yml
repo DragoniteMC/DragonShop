@@ -1,0 +1,23 @@
+title: "分頁商店"
+guiType: "pageable"
+shopItems:
+  test:
+    name: "指令"
+    material: DIAMOND_SWORD
+    lore:
+      - "左鍵點擊後會獎勵一把鑽石劍"
+      - "右鍵點擊後會檢查你有無 abc.123 權限"
+    rewards:
+      LEFT:
+        rewardType: command
+        reward:
+          - give {player} minecraft:diamond_sword
+      RIGHT:
+        rewardType: message
+        reward:
+          - "you have permission abc.123!"
+    prices:
+      RIGHT:
+        priceType: permission
+        price:
+          - "abc.123"

@@ -1,0 +1,12 @@
+name: "{title}"
+rows: 6
+pattern:
+  - AAAAAAAAA
+  - AAAAAAAAA
+  - AAAAAAAAA
+  - AAAAAAAAA
+  - AAAAAAAAA
+  - AAAAAAAAA
+items:
+  A:
+    cancelMove: true

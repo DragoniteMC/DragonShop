@@ -1,7 +1,0 @@
-name: "只有一行的 ${name} 商店"
-rows: 1
-pattern:
-  - AAAAAAAAA
-items:
-  A:
-    cancelMove: true

@@ -10,6 +10,7 @@ import com.ericlam.mc.eldgui.UIDispatcher;
 import com.ericlam.mc.eldgui.UINotFoundException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.dragonitemc.dragonshop.api.ShopService;
 import org.dragonitemc.dragonshop.config.Shop;
 
 import javax.inject.Inject;
@@ -29,7 +30,7 @@ public class DShopCommand implements CommandNode {
     private GroupConfig<Shop> shopGroupConfig;
 
     @Inject
-    private InventoryService inventoryService;
+    private ShopService shopService;
 
     @Override
     public void execute(CommandSender sender) {
@@ -41,8 +42,7 @@ public class DShopCommand implements CommandNode {
         var player = (Player) sender;
         var shopContent = shop.get();
         try {
-            UIDispatcher dispatcher = inventoryService.getUIDispatcher("shop");
-            dispatcher.openFor(player, session -> session.setAttribute("shop", shopContent));
+            shopService.openShop(player, shopContent);
         } catch (UINotFoundException e) { // 找不到該界面時
             player.sendMessage("UI not found.");
         }

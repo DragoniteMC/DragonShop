@@ -44,7 +44,7 @@ public class ShopTaskManager implements ShopTaskService {
 
         if (priceInfo == null){
 
-            purchaseTask = initTask.thenApplySync(v -> PurchaseResult.success());
+            purchaseTask = initTask.thenApplySync(v -> null);
 
         } else {
 
@@ -57,16 +57,22 @@ public class ShopTaskManager implements ShopTaskService {
 
         }
 
-        var resultTask = purchaseTask.thenRunSync(purchaseResult -> {
+        var resultTask = purchaseTask.thenApplySync(purchaseResult -> {
+
+            if (purchaseResult == null) return false;
+
             if (purchaseResult.isSuccess()){
                 player.sendMessage(message.getLang().get("purchase-success"));
             }else{
                 player.sendMessage(message.getLang().get("purchase-failed", purchaseResult.getMessage()));
             }
+
+            return purchaseResult.isSuccess();
+
         });
 
         if (rewardInfo == null){
-            return resultTask;
+            return resultTask.thenRunSync(v -> {});
         }
 
         var rewardTask = rewardTasks.get(rewardInfo.rewardType);
@@ -82,7 +88,7 @@ public class ShopTaskManager implements ShopTaskService {
 
 
     @SuppressWarnings("unchecked")
-    private <T> ScheduleService.BukkitPromise<Void> doReward(RewardTask<T> task, Object content, Player player, ScheduleService.BukkitPromise<Void> initTask){
+    private <T> ScheduleService.BukkitPromise<Void> doReward(RewardTask<T> task, Object content, Player player, ScheduleService.BukkitPromise<Boolean> initTask){
 
         T reward;
         try {
@@ -93,9 +99,12 @@ public class ShopTaskManager implements ShopTaskService {
 
         if (task instanceof AsyncRewardTask<T> asyncRewardTask){
 
-            return initTask.thenRunAsync(v -> {
+            return initTask.thenRunAsync(success -> {
+
+                if (!success) return;
+
                 try {
-                    asyncRewardTask.giveRewardAsync(reward, player).block();
+                    asyncRewardTask.giveRewardAsync(reward, player).join();
                 }catch (Throwable e){
                     e.printStackTrace();
                 }
@@ -103,7 +112,11 @@ public class ShopTaskManager implements ShopTaskService {
 
         } else {
 
-            return initTask.thenRunSync(v -> task.giveReward(reward, player));
+            return initTask.thenRunSync(success -> {
+                if (!success) return;
+                task.giveReward(reward, player);
+            });
+
         }
 
     }
@@ -121,7 +134,7 @@ public class ShopTaskManager implements ShopTaskService {
 
             return initTask.thenApplyAsync(v -> {
                 try {
-                    return asyncPriceTask.doPurchaseAsync(price, player).block();
+                    return asyncPriceTask.doPurchaseAsync(price, player).join();
                 }catch (Throwable e){
                     e.printStackTrace();
                     return PurchaseResult.failed(e.getMessage());
