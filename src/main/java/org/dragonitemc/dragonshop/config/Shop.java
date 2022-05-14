@@ -12,7 +12,7 @@ import java.util.Map;
 
 @GroupResource(
         folder = "shops",
-        preloads = {"example"}
+        preloads = {"example1", "example2"}
 )
 public class Shop extends GroupConfiguration {
 
