@@ -12,7 +12,7 @@ public class ShopViewExceptionHandler implements ExceptionViewHandler {
     @Override
     public BukkitView<?, ?> createErrorView(Exception e, String s, UISession uiSession, Player player) {
         e.printStackTrace(); // 這個要報錯
-        var shopException = new ShopException("商店執行時出現錯誤", e.getMessage());
+        var shopException = e.getCause() instanceof ShopException se ? se : new ShopException("商店執行時出現錯誤", e.getMessage());
         return new BukkitView<>(ShopErrorView.class, shopException);
     }
 

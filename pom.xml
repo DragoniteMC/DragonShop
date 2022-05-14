@@ -38,6 +38,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.openjdk.nashorn</groupId>
+            <artifactId>nashorn-core</artifactId>
+            <version>15.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>com.dragonite.mc</groupId>
             <artifactId>core-api</artifactId>
             <version>7.6.6</version>

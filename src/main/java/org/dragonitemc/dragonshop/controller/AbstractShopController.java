@@ -14,9 +14,9 @@ import org.dragonitemc.dragonshop.ShopException;
 import org.dragonitemc.dragonshop.api.ShopTaskService;
 import org.dragonitemc.dragonshop.config.Shop;
 import org.dragonitemc.dragonshop.services.ShopTaskManager;
+import org.jetbrains.annotations.Nullable;
 
 import javax.inject.Inject;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class AbstractShopController {
@@ -39,7 +39,7 @@ public abstract class AbstractShopController {
 
 
     @ClickMapping(pattern = 'A', view = AnyView.class)
-    public CompletableFuture<BukkitView<?, ?>> onClick(Player player, @ItemAttribute("name") String name, InventoryClickEvent e, UISession session) {
+    public CompletableFuture<BukkitView<?, ?>> onClick(Player player, @Nullable @ItemAttribute("name") String name, InventoryClickEvent e, UISession session) {
         if (name == null) return null;
         var clickType = e.getClick();
         Shop shop = session.getAttribute("shop");
@@ -51,12 +51,12 @@ public abstract class AbstractShopController {
             throw new ShopException("無效的物品", "物品 ID 不存在");
         }
 
-        var taskManager = (ShopTaskManager)shopTaskService;
+        var taskManager = (ShopTaskManager) shopTaskService;
         if (itemInfo.toShop != null && !itemInfo.toShop.isBlank()) {
-            var toShop = shopConfig.findById(itemInfo.toShop).orElseThrow(() -> new ShopException("找不到商店", "商店 "+itemInfo.toShop+" 不存在"));
+            var toShop = shopConfig.findById(itemInfo.toShop).orElseThrow(() -> new ShopException("找不到商店", "商店 " + itemInfo.toShop + " 不存在"));
             session.setAttribute("shop", toShop);
             // same gui type
-            if (toShop.guiType.equals(shop.guiType)){
+            if (toShop.guiType.equals(shop.guiType)) {
                 return CompletableFuture.completedFuture(index(player, session));
             } else {
                 return CompletableFuture.completedFuture(new BukkitRedirectView(String.format("dshop.%s", toShop.guiType)));
@@ -66,7 +66,7 @@ public abstract class AbstractShopController {
         if (handle == null) {
             return null;
         }
-       return taskManager.handleTask(player, handle).thenApply(v -> index(player, session));
+        return taskManager.handleTask(player, handle).thenApply(v -> index(player, session));
     }
 
 }

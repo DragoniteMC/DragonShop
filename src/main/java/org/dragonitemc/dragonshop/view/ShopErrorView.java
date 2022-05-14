@@ -11,8 +11,8 @@ import org.dragonitemc.dragonshop.ShopException;
 @ViewDescriptor(
         name = "商店錯誤",
         rows = 1,
-        patterns = "ZZZZAZZZZ",
-        cancelMove = { 'Z', 'A'}
+        patterns = "ZZZZXZZZZ",
+        cancelMove = { 'Z', 'X'}
 )
 public class ShopErrorView implements View<ShopException> {
 
@@ -25,8 +25,8 @@ public class ShopErrorView implements View<ShopException> {
         uiContext.pattern('A')
                 .components(
                     btn.icon(Material.BARRIER)
-                            .title(e.getTitle())
-                            .lore(e.getMessage())
+                            .title(e.getTitle() == null ? "錯誤" : e.getTitle())
+                            .lore(e.getMessage() == null ? "null" : e.getMessage())
                             .create()
                 );
 
