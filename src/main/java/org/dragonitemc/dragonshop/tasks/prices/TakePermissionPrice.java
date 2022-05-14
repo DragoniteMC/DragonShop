@@ -28,4 +28,16 @@ public class TakePermissionPrice extends PriceTask<List<String>> {
         lp.getUserManager().saveUser(user);
         return PurchaseResult.success();
     }
+
+    @Override
+    public void doRollBack(List<String> content, Player player) {
+        var lp = LuckPermsProvider.get();
+        User user = lp.getUserManager().getUser(player.getUniqueId());
+        if (user == null) {
+            return;
+        }
+        var d = user.data();
+        content.forEach(p -> d.add(PermissionNode.builder(p).build()));
+        lp.getUserManager().saveUser(user);
+    }
 }

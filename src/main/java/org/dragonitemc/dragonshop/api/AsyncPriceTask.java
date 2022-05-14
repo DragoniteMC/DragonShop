@@ -17,4 +17,6 @@ public abstract class AsyncPriceTask<T> extends PriceTask<T> {
 
     public abstract CompletableFuture<PurchaseResult> doPurchaseAsync(T content, Player player);
 
+    public abstract CompletableFuture<Void> doRollBackAsync(T content, Player player);
+
 }

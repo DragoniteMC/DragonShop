@@ -22,4 +22,8 @@ public class HasPermissionPrice extends PriceTask<List<String>> {
             return PurchaseResult.failed("You don't have permission to buy this item.");
         }
     }
+
+    @Override
+    public void doRollBack(List<String> content, Player player) {
+    }
 }

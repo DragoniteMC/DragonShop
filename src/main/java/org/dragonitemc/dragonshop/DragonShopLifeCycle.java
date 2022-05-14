@@ -3,6 +3,9 @@ package org.dragonitemc.dragonshop;
 import com.ericlam.mc.eld.ELDLifeCycle;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dragonitemc.dragonshop.api.ShopTaskService;
+import org.dragonitemc.dragonshop.tasks.conditions.FlyingCondition;
+import org.dragonitemc.dragonshop.tasks.conditions.PermissionCondition;
+import org.dragonitemc.dragonshop.tasks.conditions.PlaceholderJSCondition;
 import org.dragonitemc.dragonshop.tasks.prices.HasPermissionPrice;
 import org.dragonitemc.dragonshop.tasks.prices.TakePermissionPrice;
 import org.dragonitemc.dragonshop.tasks.rewards.*;
@@ -25,6 +28,10 @@ public class DragonShopLifeCycle implements ELDLifeCycle {
 
         taskService.addPriceTask(new HasPermissionPrice());
         taskService.addPriceTask(new TakePermissionPrice());
+
+        taskService.addCondition(new PermissionCondition());
+        taskService.addCondition(new PlaceholderJSCondition());
+        taskService.addCondition(new FlyingCondition());
 
     }
 

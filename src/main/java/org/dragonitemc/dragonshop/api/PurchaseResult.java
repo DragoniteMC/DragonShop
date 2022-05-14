@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 public class PurchaseResult {
 
     private final boolean success;
-    private final String message;
+    private String message;
 
 
     private PurchaseResult(boolean success, @Nullable String message) {
@@ -24,6 +24,10 @@ public class PurchaseResult {
 
     public String getMessage() {
         return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public boolean isSuccess() {

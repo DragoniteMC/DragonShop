@@ -8,12 +8,23 @@ import org.dragonitemc.dragonshop.config.Shop;
 import org.dragonitemc.dragonshop.model.PlayerShop;
 import org.dragonitemc.dragonshop.view.NormalShopView;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
 @UIController("dshop.normal")
 public class NormalShopController extends AbstractShopController {
 
     @Override
     public BukkitView<?, ?> indexView(Player player, UISession session, Shop shop) {
-        return new BukkitView<>(NormalShopView.class, new PlayerShop(shop, player));
+        var disabled = shopTaskService.getDisabledItemIds(player,
+                        shop.shopItems.entrySet()
+                                .stream()
+                                .filter(e -> e.getValue().conditions != null && !e.getValue().conditions.isEmpty())
+                                .map(e -> Map.entry(e.getKey(), e.getValue().conditions)));
+        var map = new HashMap<>(shop.shopItems);
+        map.keySet().removeAll(disabled);
+        return new BukkitView<>(NormalShopView.class, new PlayerShop(shop, player, map));
     }
 
 }

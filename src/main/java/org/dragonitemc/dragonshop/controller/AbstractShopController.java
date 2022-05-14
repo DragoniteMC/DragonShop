@@ -2,7 +2,6 @@ package org.dragonitemc.dragonshop.controller;
 
 import com.ericlam.mc.eld.annotations.InjectPool;
 import com.ericlam.mc.eld.configurations.GroupConfig;
-import com.ericlam.mc.eld.services.ScheduleService;
 import com.ericlam.mc.eldgui.UISession;
 import com.ericlam.mc.eldgui.controller.ItemAttribute;
 import com.ericlam.mc.eldgui.event.ClickMapping;
@@ -17,6 +16,8 @@ import org.dragonitemc.dragonshop.config.Shop;
 import org.dragonitemc.dragonshop.services.ShopTaskManager;
 
 import javax.inject.Inject;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class AbstractShopController {
 
@@ -38,7 +39,8 @@ public abstract class AbstractShopController {
 
 
     @ClickMapping(pattern = 'A', view = AnyView.class)
-    public ScheduleService.BukkitPromise<BukkitView<?, ?>> onClick(Player player, @ItemAttribute("name") String name, InventoryClickEvent e, UISession session) {
+    public CompletableFuture<BukkitView<?, ?>> onClick(Player player, @ItemAttribute("name") String name, InventoryClickEvent e, UISession session) {
+        if (name == null) return null;
         var clickType = e.getClick();
         Shop shop = session.getAttribute("shop");
         if (shop == null) {
@@ -53,19 +55,18 @@ public abstract class AbstractShopController {
         if (itemInfo.toShop != null && !itemInfo.toShop.isBlank()) {
             var toShop = shopConfig.findById(itemInfo.toShop).orElseThrow(() -> new ShopException("找不到商店", "商店 "+itemInfo.toShop+" 不存在"));
             session.setAttribute("shop", toShop);
-            return taskManager.handleTask(player, null, null).thenApplySync(v -> {
-                // same gui type
-                if (toShop.guiType.equals(shop.guiType)){
-                    return index(player, session);
-                } else {
-                    return new BukkitRedirectView(String.format("dshop.%s", toShop.guiType));
-                }
-
-            });
+            // same gui type
+            if (toShop.guiType.equals(shop.guiType)){
+                return CompletableFuture.completedFuture(index(player, session));
+            } else {
+                return CompletableFuture.completedFuture(new BukkitRedirectView(String.format("dshop.%s", toShop.guiType)));
+            }
         }
-        var reward = itemInfo.rewards.get(clickType);
-        var price = itemInfo.prices.get(clickType);
-        return taskManager.handleTask(player, reward, price).thenApplySync(v -> index(player, session));
+        var handle = itemInfo.handles.get(clickType);
+        if (handle == null) {
+            return null;
+        }
+       return taskManager.handleTask(player, handle).thenApply(v -> index(player, session));
     }
 
 }

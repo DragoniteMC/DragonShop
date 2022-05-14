@@ -1,0 +1,70 @@
+title: "條件商店"
+guiType: "normal"
+shopItems:
+  permission:
+    material: DIAMOND
+    slot: 0
+    name: "Permission Item"
+    lore:
+      - "if you have test.xyz permission"
+      - "you will see this item"
+    conditions:
+      - type: "permission"
+        condition:
+         - "test.xyz"
+    handles:
+      LEFT:
+        rewards:
+          - type: message
+            reward:
+              - "you have permission"
+  no-permission:
+    material: APPLE
+    slot: 0
+    name: "No Permission Item"
+    lore:
+      - "if you don't have test.xyz permission"
+      - "you will see this item"
+    conditions:
+      - type: "permission"
+        revert: true
+        condition:
+          - "test.xyz"
+    handles:
+      LEFT:
+        rewards:
+          - type: message
+            reward:
+              - "you don't have permission"
+  flying:
+    material: ELYTRA
+    slot: 1
+    name: "you are flying"
+    lore:
+      - "if you are flying"
+      - "you will see this item"
+    conditions:
+      - type: flying
+        condition: true
+    handles:
+      LEFT:
+        rewards:
+          - type: message
+            reward:
+              - "you are flying"
+  not-flying:
+    material: ACACIA_PRESSURE_PLATE
+    slot: 1
+    name: "you are not flying"
+    lore:
+      - "if you are not flying"
+      - "you will see this item"
+    conditions:
+      - type: flying
+        condition: false
+    handles:
+      LEFT:
+        rewards:
+          - type: message
+            reward:
+              - "you are not flying"

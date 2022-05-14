@@ -18,25 +18,12 @@ import java.util.Optional;
 
 @Commander(
         name = "dshop",
-        description = "DragonShop command",
-        playerOnly = true
+        description = "DragonShop command"
 )
 public class DShopCommand implements CommandNode {
 
-    @CommandArg(order = 0)
-    private String shopName;
-
-    @Inject
-    private ShopService shopService;
-
     @Override
-    public void execute(CommandSender sender) {
-        try {
-            var player = (Player) sender;
-            shopService.openShop(player, shopName);
-        } catch (UINotFoundException e) { // 找不到該界面時
-            sender.sendMessage("Shop " + shopName + " is not exist.");
-        }
-    }
+    public void execute(CommandSender commandSender) {
 
+    }
 }

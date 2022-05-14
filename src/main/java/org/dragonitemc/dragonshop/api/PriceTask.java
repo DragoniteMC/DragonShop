@@ -7,6 +7,7 @@ public abstract class PriceTask<T> {
     private final String name;
 
     public abstract PurchaseResult doPurchase(T content, Player player);
+    public abstract void doRollBack(T content, Player player);
 
     public PriceTask(String name) {
         this.name = name;

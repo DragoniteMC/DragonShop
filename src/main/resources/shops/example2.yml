@@ -6,34 +6,42 @@ shopItems:
     material: "APPLE"
     lore:
       - "左鍵發送 hello, 右鍵發送 good bye"
-    rewards:
+    handles:
       LEFT:
-        rewardType: message
-        reward:
-          - "hello"
+        rewards:
+          - type: message
+            reward:
+              - "hello"
       RIGHT:
-        rewardType: message
-        reward:
-          - "good bye"
+        rewards:
+          - type: message
+            reward:
+              - "good bye"
   test2:
     name: "給予權限"
     material: "DIAMOND"
     lore:
       - "左鍵給予 xyz.test 權限, 右鍵提取 xyz.test 權限"
-    prices:
+    handles:
       RIGHT:
-        priceType: take-permission
-        price:
-          - "xyz.test"
-    rewards:
+        prices:
+          - type: take-permission
+            failMessage: "permission take failed, you dont have permission"
+            price:
+              - "xyz.test"
+        rewards:
+          - type: message
+            reward:
+              - "已提取你的 xyz.test 權限"
       LEFT:
-        rewardType: permission
-        reward:
-          - "xyz.test"
-      RIGHT:
-        rewardType: message
-        reward:
-          - "已提取你的 xyz.test 權限"
+        rewards:
+          - type: permission
+            reward:
+              - "xyz.test"
+          - type: message
+            reward:
+              - "已給予你 xyz.test 權限"
+
   test3:
     name: "跳轉到商店 example1"
     material: "EMERALD"

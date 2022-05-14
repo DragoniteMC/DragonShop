@@ -7,17 +7,18 @@ shopItems:
     lore:
       - "左鍵點擊後會獎勵一把鑽石劍"
       - "右鍵點擊後會檢查你有無 abc.123 權限"
-    rewards:
+    handles:
       LEFT:
-        rewardType: command
-        reward:
-          - give {player} minecraft:diamond_sword
+        rewards:
+          - type: command
+            reward:
+              - give {player} minecraft:diamond_sword
       RIGHT:
-        rewardType: message
-        reward:
-          - "you have permission abc.123!"
-    prices:
-      RIGHT:
-        priceType: has-permission
-        price:
-          - "abc.123"
+        prices:
+          - type: has-permission
+            price:
+              - "abc.123"
+        rewards:
+          - type: message
+            reward:
+              - "you have permission abc.123!"

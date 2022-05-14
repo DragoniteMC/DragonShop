@@ -12,7 +12,7 @@ import java.util.Map;
 
 @GroupResource(
         folder = "shops",
-        preloads = {"example1", "example2"}
+        preloads = {"example1", "example2", "example3"}
 )
 public class Shop extends GroupConfiguration {
 
@@ -22,7 +22,7 @@ public class Shop extends GroupConfiguration {
 
     // 商店物品列表
     public Map<String, ShopItemInfo> shopItems = new HashMap<>();
-    
+
     public static class ShopItemInfo {
 
         public String name;
@@ -33,13 +33,15 @@ public class Shop extends GroupConfiguration {
 
         public int amount;
 
+        public int data;
+
         public String toShop;
 
-        public Map<ClickType, RewardInfo> rewards = new HashMap<>();
+        public Map<ClickType, ClickHandle> handles = new HashMap<>();
 
-        public Map<ClickType, PriceInfo> prices = new HashMap<>();
+        public List<ConditionInfo> conditions = new ArrayList<>();
 
-        public ShopItemInfo(){
+        public ShopItemInfo() {
             this.name = "Unknown";
             this.lore = new ArrayList<>();
             this.material = Material.STONE;
@@ -49,20 +51,36 @@ public class Shop extends GroupConfiguration {
 
     }
 
+    public static class ConditionInfo {
+
+        public String type;
+        public Object condition;
+
+        public boolean revert = false;
+
+    }
+
+    public static class ClickHandle {
+
+        public List<RewardInfo> rewards;
+        public List<PriceInfo> prices;
+    }
+
     public static class RewardInfo {
 
-        public String rewardType;
+        public String type;
         public Object reward;
 
     }
 
     public static class PriceInfo {
 
-        public String priceType;
+        public String type;
         public Object price;
 
+        public String failedMessage;
+
     }
-    
 
 
 }

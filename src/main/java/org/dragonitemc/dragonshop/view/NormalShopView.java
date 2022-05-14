@@ -16,14 +16,14 @@ public class NormalShopView implements View<PlayerShop> {
     @Override
     public void renderView(PlayerShop playerShop, UIContext context) {
 
-        var shop = playerShop.shop;
         var player = playerShop.player;
 
         PlaceholderItemFactory button = context.factory(PlaceholderItemFactory.class);
-        shop.shopItems.entrySet().stream().filter(entry -> entry.getValue().slot != -1).forEach(entry -> {
+        playerShop.shopItems.entrySet().stream().filter(entry -> entry.getValue().slot != -1).forEach(entry -> {
 
             var id = entry.getKey();
             var itemInfo = entry.getValue();
+
 
             context.pattern('A')
                     .component(
@@ -38,7 +38,7 @@ public class NormalShopView implements View<PlayerShop> {
                     );
         });
 
-        shop.shopItems.entrySet().stream().filter(entry -> entry.getValue().slot == -1).forEach(entry -> {
+        playerShop.shopItems.entrySet().stream().filter(entry -> entry.getValue().slot == -1).forEach(entry -> {
 
             var id = entry.getKey();
             var itemInfo = entry.getValue();

@@ -15,6 +15,7 @@ import org.dragonitemc.dragonshop.view.PageableShopView;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 @UIController("dshop.pageable")
@@ -25,7 +26,12 @@ public class PageableShopController extends AbstractShopController {
     @Override
     public BukkitView<?, ?> indexView(Player player, UISession session, Shop shop) {
         int page = Optional.ofNullable((Integer) session.getAttribute("page")).orElse(1);
-        var content = shop.shopItems.entrySet().stream().skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE).toList();
+        var content = shop.shopItems
+                .entrySet()
+                .stream()
+                .filter(e -> shopTaskService.isPassCondition(player, e.getValue()))
+                .skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE)
+                .toList();
         var pageable = new PlayerShopPage(content, page, shop.shopItems.size());
         session.setAttribute("current", pageable);
         var playerShop = new PageablePlayerShop(shop.title, pageable, player);
