@@ -1,5 +1,7 @@
 package org.dragonitemc.dragonshop.services;
 
+import com.ericlam.mc.eld.annotations.InjectPool;
+import com.ericlam.mc.eld.configurations.GroupConfig;
 import com.ericlam.mc.eldgui.InventoryService;
 import com.ericlam.mc.eldgui.UINotFoundException;
 import com.ericlam.mc.eldgui.UISession;
@@ -18,6 +20,21 @@ public class ShopManager implements ShopService {
 
     @Inject
     private InventoryService inventoryService;
+
+    @InjectPool
+    private GroupConfig<Shop> shopGroupConfig;
+
+    @Override
+    public void openShop(Player player, String shop) throws UINotFoundException {
+
+        if (shopGroupConfig == null) {
+            player.sendMessage("group config is null");
+        }
+
+        var shopOpt = shopGroupConfig.findById(shop);
+        if (shopOpt.isEmpty()) throw new UINotFoundException("Shop "+shop+" not found");
+        openShop(player, shopOpt.get());
+    }
 
     @Override
     public void openShop(Player player, Shop shop) throws UINotFoundException {

@@ -18,6 +18,6 @@ shopItems:
           - "you have permission abc.123!"
     prices:
       RIGHT:
-        priceType: permission
+        priceType: has-permission
         price:
           - "abc.123"

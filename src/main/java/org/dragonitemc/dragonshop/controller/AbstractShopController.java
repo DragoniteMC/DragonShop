@@ -7,6 +7,7 @@ import com.ericlam.mc.eldgui.UISession;
 import com.ericlam.mc.eldgui.controller.ItemAttribute;
 import com.ericlam.mc.eldgui.event.ClickMapping;
 import com.ericlam.mc.eldgui.view.AnyView;
+import com.ericlam.mc.eldgui.view.BukkitRedirectView;
 import com.ericlam.mc.eldgui.view.BukkitView;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -21,7 +22,6 @@ public abstract class AbstractShopController {
 
     @Inject
     protected ShopTaskService shopTaskService;
-
 
     @InjectPool
     protected GroupConfig<Shop> shopConfig;
@@ -50,10 +50,18 @@ public abstract class AbstractShopController {
         }
 
         var taskManager = (ShopTaskManager)shopTaskService;
-        if (itemInfo.toShop != null) {
-            shop = shopConfig.findById(itemInfo.toShop).orElseThrow(() -> new ShopException("找不到商店", "商店 "+itemInfo.toShop+" 不存在"));
-            session.setAttribute("shop", shop);
-            return taskManager.handleTask(player, null, null).thenApplySync(v -> index(player, session));
+        if (itemInfo.toShop != null && !itemInfo.toShop.isBlank()) {
+            var toShop = shopConfig.findById(itemInfo.toShop).orElseThrow(() -> new ShopException("找不到商店", "商店 "+itemInfo.toShop+" 不存在"));
+            session.setAttribute("shop", toShop);
+            return taskManager.handleTask(player, null, null).thenApplySync(v -> {
+                // same gui type
+                if (toShop.guiType.equals(shop.guiType)){
+                    return index(player, session);
+                } else {
+                    return new BukkitRedirectView(String.format("dshop.%s", toShop.guiType));
+                }
+
+            });
         }
         var reward = itemInfo.rewards.get(clickType);
         var price = itemInfo.prices.get(clickType);

@@ -105,7 +105,7 @@ public class PageableShopController extends AbstractShopController {
 
         @Override
         public boolean hasPrevious() {
-            return getCurrentPage() > 0;
+            return getCurrentPage() > 1;
         }
 
         @Override

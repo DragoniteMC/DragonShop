@@ -9,6 +9,9 @@ import java.util.function.Consumer;
 
 public interface ShopService {
 
+
+    void openShop(Player player, String shop) throws UINotFoundException;
+
     void openShop(Player player, Shop shop) throws UINotFoundException;
 
     void openShop(Player player, Shop shop, Consumer<UISession> sessionConsumer) throws UINotFoundException;

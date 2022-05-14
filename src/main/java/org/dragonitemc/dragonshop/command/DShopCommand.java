@@ -26,25 +26,16 @@ public class DShopCommand implements CommandNode {
     @CommandArg(order = 0)
     private String shopName;
 
-    @InjectPool
-    private GroupConfig<Shop> shopGroupConfig;
-
     @Inject
     private ShopService shopService;
 
     @Override
     public void execute(CommandSender sender) {
-        Optional<Shop> shop = shopGroupConfig.findById(shopName);
-        if (shop.isEmpty()){
-            sender.sendMessage("Shop " + shopName + " is not exist.");
-            return;
-        }
-        var player = (Player) sender;
-        var shopContent = shop.get();
         try {
-            shopService.openShop(player, shopContent);
+            var player = (Player) sender;
+            shopService.openShop(player, shopName);
         } catch (UINotFoundException e) { // 找不到該界面時
-            player.sendMessage("UI not found.");
+            sender.sendMessage("Shop " + shopName + " is not exist.");
         }
     }
 

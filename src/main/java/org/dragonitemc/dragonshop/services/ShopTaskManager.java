@@ -44,7 +44,7 @@ public class ShopTaskManager implements ShopTaskService {
 
         if (priceInfo == null){
 
-            purchaseTask = initTask.thenApplySync(v -> null);
+            purchaseTask = initTask.thenApplySync(v -> PurchaseResult.success());
 
         } else {
 
@@ -59,12 +59,14 @@ public class ShopTaskManager implements ShopTaskService {
 
         var resultTask = purchaseTask.thenApplySync(purchaseResult -> {
 
-            if (purchaseResult == null) return false;
+            if (priceInfo != null){
 
-            if (purchaseResult.isSuccess()){
-                player.sendMessage(message.getLang().get("purchase-success"));
-            }else{
-                player.sendMessage(message.getLang().get("purchase-failed", purchaseResult.getMessage()));
+                if (purchaseResult.isSuccess()){
+                    player.sendMessage(message.getLang().get("purchase-success"));
+                }else{
+                    player.sendMessage(message.getLang().get("purchase-failed", purchaseResult.getMessage()));
+                }
+
             }
 
             return purchaseResult.isSuccess();
@@ -150,11 +152,13 @@ public class ShopTaskManager implements ShopTaskService {
 
     @Override
     public void addRewardTask(RewardTask<?> rewardTask) {
+        plugin.getLogger().info("成功註冊 獎勵類型: " + rewardTask.getName());
         this.rewardTasks.put(rewardTask.getName(), rewardTask);
     }
 
     @Override
     public void addPriceTask(PriceTask<?> priceTask) {
+        plugin.getLogger().info("成功註冊 價格類型: " + priceTask.getName());
         this.priceTasks.put(priceTask.getName(), priceTask);
     }
 }
