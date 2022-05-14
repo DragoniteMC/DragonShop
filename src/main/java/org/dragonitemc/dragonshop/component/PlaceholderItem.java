@@ -34,6 +34,11 @@ public class PlaceholderItem extends AbstractComponent implements Animatable {
         this.updateInterval = updateInterval;
         this.papiDisplay = papiDisplay;
         this.papiLore = papiLore;
+
+        itemFactory.display(papiDisplay);
+        itemFactory.lore(papiLore);
+
+        updateInventory();
     }
 
     @Override

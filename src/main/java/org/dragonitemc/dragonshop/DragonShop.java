@@ -7,6 +7,8 @@ import com.ericlam.mc.eld.annotations.ELDPlugin;
 import com.ericlam.mc.eldgui.MVCInstallation;
 import org.dragonitemc.dragonshop.api.ShopService;
 import org.dragonitemc.dragonshop.api.ShopTaskService;
+import org.dragonitemc.dragonshop.component.PlaceholderItemFactory;
+import org.dragonitemc.dragonshop.component.PlaceholderItemFactoryImpl;
 import org.dragonitemc.dragonshop.config.DragonShopMessage;
 import org.dragonitemc.dragonshop.config.GUITemplate;
 import org.dragonitemc.dragonshop.config.Shop;
@@ -37,6 +39,7 @@ public class DragonShop extends ELDBukkitPlugin {
 
         mvc.registerControllers(NormalShopController.class, PageableShopController.class);
         mvc.addExceptionViewHandlers(List.of(ShopViewExceptionHandler.class));
+        mvc.addComponentFactory(PlaceholderItemFactory.class, PlaceholderItemFactoryImpl.class);
     }
 
     @Override
