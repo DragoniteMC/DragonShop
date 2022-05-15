@@ -3,6 +3,7 @@ package org.dragonitemc.dragonshop.controller;
 import com.ericlam.mc.eld.configurations.Page;
 import com.ericlam.mc.eld.configurations.PageRequest;
 import com.ericlam.mc.eldgui.UISession;
+import com.ericlam.mc.eldgui.controller.AsyncLoadingView;
 import com.ericlam.mc.eldgui.controller.UIController;
 import com.ericlam.mc.eldgui.event.ClickMapping;
 import com.ericlam.mc.eldgui.view.BukkitView;
@@ -10,15 +11,16 @@ import org.bukkit.entity.Player;
 import org.dragonitemc.dragonshop.ShopException;
 import org.dragonitemc.dragonshop.config.Shop;
 import org.dragonitemc.dragonshop.model.PageablePlayerShop;
+import org.dragonitemc.dragonshop.view.AsyncShopView;
 import org.dragonitemc.dragonshop.view.PageableShopView;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 @UIController("dshop.pageable")
+@AsyncLoadingView(AsyncShopView.class)
 public class PageableShopController extends AbstractShopController {
 
     private static final long PAGE_SIZE = 45L;

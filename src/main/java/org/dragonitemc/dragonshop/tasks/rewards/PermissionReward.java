@@ -19,12 +19,10 @@ public class PermissionReward extends RewardTask<List<String>> {
         var lp = LuckPermsProvider.get();
         User user = lp.getUserManager().getUser(player.getUniqueId());
         if (user == null) {
-            player.sendMessage("unknown user");
-            return;
+            throw new IllegalStateException("User not found");
         }
         var d = user.data();
         content.forEach(s -> d.add(PermissionNode.builder().permission(s).build()));
         lp.getUserManager().saveUser(user);
-        player.sendMessage("獎勵了權限: " + String.join(", ", content));
     }
 }

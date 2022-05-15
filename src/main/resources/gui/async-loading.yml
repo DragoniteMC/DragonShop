@@ -1,0 +1,12 @@
+name: "&8加載中..."
+rows: 6
+pattern:
+  - ZZZZZZZZZ
+  - ZZZZZZZZZ
+  - ZZZZZZZZZ
+  - ZZZZZZZZZ
+  - ZZZZZZZZZ
+  - ZZZZZZZZZ
+items:
+  Z:
+    material: GREEN_STAINED_GLASS_PANE
