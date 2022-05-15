@@ -5,6 +5,7 @@ import com.ericlam.mc.eld.annotations.InjectPool;
 import com.ericlam.mc.eld.components.CommandNode;
 import com.ericlam.mc.eld.configurations.GroupConfig;
 import org.bukkit.command.CommandSender;
+import org.dragonitemc.dragonshop.config.GUITemplate;
 import org.dragonitemc.dragonshop.config.Shop;
 
 @Commander(
@@ -17,9 +18,13 @@ public class DShopReloadCommand implements CommandNode {
     @InjectPool
     private GroupConfig<Shop> shopGroupConfig;
 
+    @InjectPool
+    private GroupConfig<GUITemplate> templateGroupConfig;
+
     @Override
     public void execute(CommandSender commandSender) {
         shopGroupConfig.fetch();
+        templateGroupConfig.fetch();
         commandSender.sendMessage("§aReload success!");
     }
 }
