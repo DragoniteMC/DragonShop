@@ -34,6 +34,7 @@ public class NormalShopView implements View<PlayerShop> {
                                     .number(itemInfo.amount)
                                     .placeholderDisplay(itemInfo.name)
                                     .placeholderLore(itemInfo.lore)
+                                    .editItem(f -> f.modelData(itemInfo.data))
                                     .create()
                     );
         });
@@ -51,6 +52,7 @@ public class NormalShopView implements View<PlayerShop> {
                                     .setPlaceholderPlayer(player)
                                     .placeholderDisplay(itemInfo.name)
                                     .placeholderLore(itemInfo.lore)
+                                    .editItem(f -> f.modelData(itemInfo.data))
                                     .create()
                     );
         });

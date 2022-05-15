@@ -22,7 +22,7 @@ public class ShopErrorView implements View<ShopException> {
         ButtonFactory btn = uiContext.factory(ButtonFactory.class);
         uiContext.pattern('Z').fill(btn.icon(Material.BLACK_STAINED_GLASS_PANE).create());
 
-        uiContext.pattern('A')
+        uiContext.pattern('X')
                 .components(
                     btn.icon(Material.BARRIER)
                             .title(e.getTitle() == null ? "錯誤" : e.getTitle())
