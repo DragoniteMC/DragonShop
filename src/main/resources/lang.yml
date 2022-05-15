@@ -1,3 +1,4 @@
 prefix: "&aDragonShop// &7"
 purchase-success: "Purchase successful!"
 purchase-failed: "Purchase failed: {0}"
+no-permission: "you dont have permission to open this shop."
