@@ -59,8 +59,6 @@ public class ShopTaskManager implements ShopTaskService {
             priceTasks.put(task, priceInfo);
         }
 
-        priceTasks.forEach(this::validatePriceContent);
-
 
         Map<RewardTask<?>, Shop.RewardInfo> rewardTasks = new LinkedHashMap<>();
         for (Shop.RewardInfo rewardInfo : Optional.ofNullable(handle.rewards).orElse(List.of())) {
@@ -70,9 +68,6 @@ public class ShopTaskManager implements ShopTaskService {
             }
             rewardTasks.put(task, rewardInfo);
         }
-
-        rewardTasks.forEach(this::validateRewardContent);
-
 
         for (PriceTask<?> task : priceTasks.keySet()) {
             var content = priceTasks.get(task);
@@ -138,34 +133,6 @@ public class ShopTaskManager implements ShopTaskService {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void validateConditions(Condition<T> task, Object info) {
-        try {
-            var a = (T) info;
-        } catch (ClassCastException e) {
-            throw new ShopException("設置錯誤", "條件類型 " + task.getName() + " 不接受這個類型: " + info.getClass().getName());
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> void validateRewardContent(RewardTask<T> task, Shop.RewardInfo info) {
-        try {
-            var a = (T) info.reward;
-        } catch (ClassCastException e) {
-            throw new ShopException("設置錯誤", "獎勵類型 " + task.getName() + " 不接受這個類型: " + info.reward.getClass().getName());
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T> void validatePriceContent(PriceTask<T> task, Shop.PriceInfo info) {
-        try {
-            var a = (T) info.price;
-        } catch (ClassCastException e) {
-            throw new ShopException("設置錯誤", "價格類型 " + task.getName() + " 不接受這個類型: " + info.price.getClass().getName());
-        }
-    }
-
-
-    @SuppressWarnings("unchecked")
     private <T> CompletableFuture<Void> doRollback(Player player, PriceTask<T> task, Object content) {
         T price = (T) content;
         if (task instanceof AsyncPriceTask<T> at) {
@@ -179,24 +146,37 @@ public class ShopTaskManager implements ShopTaskService {
 
     @SuppressWarnings("unchecked")
     private <T> CompletableFuture<PurchaseResult> doPurchase(Player player, PriceTask<T> task, Object content) {
-        T price = (T) content;
-        if (task instanceof AsyncPriceTask<T> at) {
-            return at.doPurchaseAsync(price, player);
-        } else {
-            var result = task.doPurchase(price, player);
-            return CompletableFuture.completedFuture(result);
+        try {
+            T price = (T) content;
+            if (task instanceof AsyncPriceTask<T> at) {
+                return at.doPurchaseAsync(price, player);
+            } else {
+                var result = task.doPurchase(price, player);
+                return CompletableFuture.completedFuture(result);
+            }
+        }catch (ClassCastException e){
+            throw new ShopException("設置錯誤", "價格類型 " + task.getName() + " 不接受這個類型: " + content.getClass().getName());
         }
+
+
     }
 
     @SuppressWarnings("unchecked")
     private <T> CompletableFuture<Void> doReward(Player player, RewardTask<T> task, Object content) {
-        T reward = (T) content;
-        if (task instanceof AsyncRewardTask<T> at) {
-            return at.giveRewardAsync(reward, player);
-        } else {
-            task.giveReward(reward, player);
-            return CompletableFuture.completedFuture(null);
+        try {
+            T reward = (T) content;
+            if (task instanceof AsyncRewardTask<T> at) {
+                return at.giveRewardAsync(reward, player);
+            } else {
+                task.giveReward(reward, player);
+                return CompletableFuture.completedFuture(null);
+            }
+
+        }catch (ClassCastException e){
+            throw new ShopException("設置錯誤", "獎勵類型 " + task.getName() + " 不接受這個類型: " + content.getClass().getName());
         }
+
+
     }
 
     @Override
