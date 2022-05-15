@@ -15,6 +15,11 @@ public abstract class AsyncPriceTask<T> extends PriceTask<T> {
         throw new UnsupportedOperationException("you must use async methods");
     }
 
+    @Override
+    public void doRollBack(T content, Player player) {
+        throw new UnsupportedOperationException("you must use async methods");
+    }
+
     public abstract CompletableFuture<PurchaseResult> doPurchaseAsync(T content, Player player);
 
     public abstract CompletableFuture<Void> doRollBackAsync(T content, Player player);
