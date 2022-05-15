@@ -1,5 +1,7 @@
 package org.dragonitemc.dragonshop.services;
 
+import com.ericlam.mc.eld.misc.DebugLogger;
+import com.ericlam.mc.eld.services.LoggingService;
 import com.ericlam.mc.eld.services.ScheduleService;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -8,11 +10,14 @@ import org.dragonitemc.dragonshop.ShopException;
 import org.dragonitemc.dragonshop.api.*;
 import org.dragonitemc.dragonshop.config.DragonShopMessage;
 import org.dragonitemc.dragonshop.config.Shop;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class ShopTaskManager implements ShopTaskService {
@@ -31,12 +36,20 @@ public class ShopTaskManager implements ShopTaskService {
 
     private final Map<String, Condition<?>> conditionMap = new ConcurrentHashMap<>();
 
+    private final DebugLogger logger;
+
+    @Inject
+    public ShopTaskManager(LoggingService loggingService){
+        this.logger = loggingService.getLogger(ShopTaskService.class);
+    }
+
     public CompletableFuture<Void> handleTask(Player player, Shop.ClickHandle handle) {
 
         CompletableFuture<PurchaseResult> future = CompletableFuture.completedFuture(PurchaseResult.success());
 
         Map<PriceTask<?>, Shop.PriceInfo> priceTasks = new LinkedHashMap<>();
-        List<CompletableFuture<Void>> rollbackTasks = new ArrayList<>();
+
+        List<Supplier<CompletableFuture<Void>>> rollbackTasks = new ArrayList<>();
 
         for (Shop.PriceInfo priceInfo : Optional.ofNullable(handle.prices).orElse(List.of())) {
             var task = this.priceTasks.get(priceInfo.type);
@@ -64,29 +77,35 @@ public class ShopTaskManager implements ShopTaskService {
         for (PriceTask<?> task : priceTasks.keySet()) {
             var content = priceTasks.get(task);
             future = future.thenCompose(lastResult -> {
+                logger.debug("processing price task {0}", task.getName());
                 // 前面失敗可立刻返回
                 if (!lastResult.isSuccess()) {
+                    logger.debug("lastResult is not success, return");
                     return CompletableFuture.completedFuture(lastResult);
                 }
                 return doPurchase(player, task, content.price).thenApply(result -> {
                     if (result.isSuccess()) {
-                        rollbackTasks.add(doRollback(player, task, content.price));
+                        rollbackTasks.add(() -> doRollback(player, task, content.price));
                     } else if (content.failedMessage != null) {
                         result.setMessage(content.failedMessage);
                     }
+                    logger.debug("price task {0} result: {1}", task.getName(), result);
                     return result;
                 });
             });
         }
 
-        CompletableFuture<Boolean> priceTask = future.thenCompose(canPurchase -> {
+        CompletableFuture<Boolean> priceTask = future.thenCompose(purchaseResult -> {
 
-            if (!canPurchase.isSuccess()) {
+            if (!purchaseResult.isSuccess()) {
 
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', canPurchase.getMessage()));
-                return CompletableFuture.allOf(rollbackTasks.toArray(CompletableFuture[]::new)).thenApply(v -> false);
+                logger.debug("Purchase failed for player {0}: {1}", player.getName(), purchaseResult.getMessage());
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', purchaseResult.getMessage()));
+                logger.debug("doing all {0} rollback tasks", rollbackTasks.size());
+                return CompletableFuture.allOf(rollbackTasks.stream().map(Supplier::get).toArray(CompletableFuture[]::new)).thenApply(v -> false);
 
             } else if (!priceTasks.isEmpty()) {
+                logger.debug("Purchase success for player {0}", player.getName());
                 // TODO custom message
                 player.sendMessage("購買成功");
             }
@@ -96,20 +115,23 @@ public class ShopTaskManager implements ShopTaskService {
         });
 
         if (rewardTasks.isEmpty()) {
+            logger.debug("reward is empty, returned");
             return priceTask.thenAccept(success -> {
             });
         }
 
-        List<CompletableFuture<Void>> rewardFutures = new ArrayList<>();
+        List<Supplier<CompletableFuture<Void>>> rewardFutures = new ArrayList<>();
         for (RewardTask<?> task : rewardTasks.keySet()) {
             var content = rewardTasks.get(task);
-            rewardFutures.add(doReward(player, task, content.reward));
+            rewardFutures.add(() -> doReward(player, task, content.reward));
         }
 
         return priceTask.thenCompose(success -> {
             if (success) {
-                return CompletableFuture.allOf(rewardFutures.toArray(CompletableFuture[]::new));
+                logger.debug("purchase result is success, doing all {0} rewards tasks", rewardFutures.size());
+                return CompletableFuture.allOf(rewardFutures.stream().map(Supplier::get).toArray(CompletableFuture[]::new));
             } else {
+                logger.debug("purchase result is failed");
                 return CompletableFuture.completedFuture(null);
             }
         });

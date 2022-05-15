@@ -6,7 +6,7 @@
 
     <groupId>com.dragonite.mc</groupId>
     <artifactId>dragonshop</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.7.1</version>
 
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
