@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @UIController("dshop.pageable")
 @AsyncLoadingView(AsyncShopView.class)
@@ -32,9 +33,13 @@ public class PageableShopController extends AbstractShopController {
                 .entrySet()
                 .stream()
                 .filter(e -> shopTaskService.isPassCondition(player, e.getValue()))
-                .skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE)
                 .toList();
-        var pageable = new PlayerShopPage(content, page, shop.shopItems.size());
+        var pageable = new PlayerShopPage(
+                content.stream()
+                        .skip((page - 1) * PAGE_SIZE)
+                        .limit(PAGE_SIZE)
+                        .collect(Collectors.toList()),
+                page, content.size());
         session.setAttribute("current", pageable);
         var playerShop = new PageablePlayerShop(shop.title, pageable, player);
         return new BukkitView<>(PageableShopView.class, playerShop);

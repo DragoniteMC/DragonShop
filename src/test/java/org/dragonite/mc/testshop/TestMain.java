@@ -1,5 +1,6 @@
 package org.dragonite.mc.testshop;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.dragonitemc.dragonshop.api.RewardTask;
 
 import java.util.List;

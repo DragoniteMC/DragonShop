@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.dragonitemc.dragonshop.DragonShop;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class PlaceholderItem extends AbstractComponent implements Animatable {
 
@@ -19,6 +20,7 @@ public class PlaceholderItem extends AbstractComponent implements Animatable {
     private final String papiDisplay;
     private final List<String> papiLore;
 
+    private final Pattern placeholderPattern = PlaceholderAPI.getPlaceholderPattern();
 
     private BukkitTask task = null;
 
@@ -62,11 +64,11 @@ public class PlaceholderItem extends AbstractComponent implements Animatable {
     }
 
     private boolean hasPapiInDisplay(){
-        return this.papiDisplay != null && this.papiDisplay.matches("\\%(.+)\\%");
+        return this.papiDisplay != null && placeholderPattern.matcher(this.papiDisplay).find();
     }
 
     private boolean hasPapiInLore(){
-        return this.papiLore != null && this.papiLore.stream().anyMatch(s -> s.matches("\\%(.+)\\%"));
+        return this.papiLore != null && this.papiLore.stream().anyMatch(s -> placeholderPattern.matcher(s).find());
     }
 
 
