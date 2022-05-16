@@ -10,8 +10,6 @@ import org.dragonitemc.dragonshop.ShopException;
 import org.dragonitemc.dragonshop.api.*;
 import org.dragonitemc.dragonshop.config.DragonShopMessage;
 import org.dragonitemc.dragonshop.config.Shop;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.*;
@@ -39,7 +37,7 @@ public class ShopTaskManager implements ShopTaskService {
     private final DebugLogger logger;
 
     @Inject
-    public ShopTaskManager(LoggingService loggingService){
+    public ShopTaskManager(LoggingService loggingService) {
         this.logger = loggingService.getLogger(ShopTaskService.class);
     }
 
@@ -78,7 +76,26 @@ public class ShopTaskManager implements ShopTaskService {
                     logger.debug("lastResult is not success, return");
                     return CompletableFuture.completedFuture(lastResult);
                 }
-                return doPurchase(player, task, content.price).thenApply(result -> {
+                return doPurchase(player, task, content.price).exceptionallyCompose((ex) -> {
+
+                    Throwable e = ex;
+                    while (e.getCause() != null) {
+                        e = e.getCause();
+                    }
+                    // 不是 ShopException 返回購買失敗的結果
+                    if (!(e instanceof ShopException se)) {
+                        logger.warn(ex, "error occurred when processing price task {0}", task.getName());
+                        return CompletableFuture.completedFuture(PurchaseResult.failed("§4無法處理購買程序，錯誤: " + ex.getMessage()));
+                    } else {
+                        // 否則返回錯誤界面
+                        // do all rollback first, then throw runtime exception
+                        return CompletableFuture.allOf(rollbackTasks.stream().map(Supplier::get).toArray(CompletableFuture[]::new))
+                                .thenApply(V -> {
+                                    throw se;
+                                });
+                    }
+
+                }).thenApply(result -> {
                     if (result.isSuccess()) {
                         rollbackTasks.add(() -> doRollback(player, task, content.price));
                     } else if (content.failedMessage != null) {
@@ -154,7 +171,7 @@ public class ShopTaskManager implements ShopTaskService {
                 var result = task.doPurchase(price, player);
                 return CompletableFuture.completedFuture(result);
             }
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             throw new ShopException("設置錯誤", "價格類型 " + task.getName() + " 不接受這個類型: " + content.getClass().getName());
         }
 
@@ -172,7 +189,7 @@ public class ShopTaskManager implements ShopTaskService {
                 return CompletableFuture.completedFuture(null);
             }
 
-        }catch (ClassCastException e){
+        } catch (ClassCastException e) {
             throw new ShopException("設置錯誤", "獎勵類型 " + task.getName() + " 不接受這個類型: " + content.getClass().getName());
         }
 
