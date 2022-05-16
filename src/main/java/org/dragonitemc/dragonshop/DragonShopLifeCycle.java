@@ -25,6 +25,7 @@ public class DragonShopLifeCycle implements ELDLifeCycle {
         taskService.addRewardTask(new CloseReward());
         taskService.addRewardTask(new PermissionReward());
         taskService.addRewardTask(new BungeeServerReward());
+        taskService.addRewardTask(new PlaySoundReward());
 
         taskService.addPriceTask(new HasPermissionPrice());
         taskService.addPriceTask(new TakePermissionPrice());
@@ -32,6 +33,7 @@ public class DragonShopLifeCycle implements ELDLifeCycle {
         taskService.addCondition(new PermissionCondition());
         taskService.addCondition(new PlaceholderJSCondition());
         taskService.addCondition(new FlyingCondition());
+
 
     }
 
