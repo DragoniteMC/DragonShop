@@ -35,6 +35,7 @@ public class Shop extends GroupConfiguration {
 
         public int data;
 
+        public int damage;
         public String toShop;
 
         public Map<ClickType, ClickHandle> handles = new HashMap<>();

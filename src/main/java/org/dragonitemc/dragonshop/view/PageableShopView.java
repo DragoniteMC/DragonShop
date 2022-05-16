@@ -41,7 +41,10 @@ public class PageableShopView implements View<PageablePlayerShop> {
                                     .number(itemInfo.amount)
                                     .placeholderDisplay(itemInfo.name)
                                     .placeholderLore(itemInfo.lore)
-                                    .editItem(f -> f.modelData(itemInfo.data))
+                                    .editItem(f -> {
+                                        f.modelData(itemInfo.data);
+                                        f.durability(itemInfo.damage);
+                                    })
                                     .create()
                     );
         });
@@ -59,7 +62,10 @@ public class PageableShopView implements View<PageablePlayerShop> {
                                     .setPlaceholderPlayer(player)
                                     .placeholderDisplay(itemInfo.name)
                                     .placeholderLore(itemInfo.lore)
-                                    .editItem(f -> f.modelData(itemInfo.data))
+                                    .editItem(f -> {
+                                        f.modelData(itemInfo.data);
+                                        f.durability(itemInfo.damage);
+                                    })
                                     .create()
                     );
         });
