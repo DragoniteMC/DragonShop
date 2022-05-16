@@ -37,6 +37,7 @@ public class NormalShopView implements View<PlayerShop> {
                                     .editItem(f -> {
                                         f.modelData(itemInfo.data);
                                         f.durability(itemInfo.damage);
+                                        f.unbreakable(itemInfo.damage > 0);
                                     })
                                     .create()
                     );
@@ -58,6 +59,7 @@ public class NormalShopView implements View<PlayerShop> {
                                     .editItem(f -> {
                                         f.modelData(itemInfo.data);
                                         f.durability(itemInfo.damage);
+                                        f.unbreakable(itemInfo.damage > 0);
                                     })
                                     .create()
                     );

@@ -44,6 +44,7 @@ public class PageableShopView implements View<PageablePlayerShop> {
                                     .editItem(f -> {
                                         f.modelData(itemInfo.data);
                                         f.durability(itemInfo.damage);
+                                        f.unbreakable(itemInfo.damage > 0);
                                     })
                                     .create()
                     );
@@ -65,6 +66,7 @@ public class PageableShopView implements View<PageablePlayerShop> {
                                     .editItem(f -> {
                                         f.modelData(itemInfo.data);
                                         f.durability(itemInfo.damage);
+                                        f.unbreakable(itemInfo.damage > 0);
                                     })
                                     .create()
                     );
