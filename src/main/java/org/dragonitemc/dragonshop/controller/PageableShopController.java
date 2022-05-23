@@ -7,6 +7,7 @@ import com.ericlam.mc.eldgui.controller.AsyncLoadingView;
 import com.ericlam.mc.eldgui.controller.UIController;
 import com.ericlam.mc.eldgui.event.ClickMapping;
 import com.ericlam.mc.eldgui.view.BukkitView;
+import com.ericlam.mc.eldgui.view.View;
 import org.bukkit.entity.Player;
 import org.dragonitemc.dragonshop.ShopException;
 import org.dragonitemc.dragonshop.config.Shop;
@@ -42,7 +43,13 @@ public class PageableShopController extends AbstractShopController {
                 page, content.size());
         session.setAttribute("current", pageable);
         var playerShop = new PageablePlayerShop(shop.title, pageable, player);
-        return new BukkitView<>(PageableShopView.class, playerShop);
+
+
+        Class<? extends View<PageablePlayerShop>> viewClass = PageableShopView.class;
+        if (shop.viewType != null) {
+            viewClass = classGenerator.generateViewWithTemplate(shop.viewType, PageableShopView.class);
+        }
+        return new BukkitView<>(viewClass, playerShop);
     }
 
     @ClickMapping(view = PageableShopView.class, pattern = 'B')

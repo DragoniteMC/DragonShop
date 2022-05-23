@@ -4,6 +4,7 @@ import com.ericlam.mc.eldgui.UISession;
 import com.ericlam.mc.eldgui.controller.AsyncLoadingView;
 import com.ericlam.mc.eldgui.controller.UIController;
 import com.ericlam.mc.eldgui.view.BukkitView;
+import com.ericlam.mc.eldgui.view.View;
 import org.bukkit.entity.Player;
 import org.dragonitemc.dragonshop.config.Shop;
 import org.dragonitemc.dragonshop.model.PlayerShop;
@@ -26,7 +27,12 @@ public class NormalShopController extends AbstractShopController {
                         .map(e -> Map.entry(e.getKey(), e.getValue().conditions)));
         var map = new HashMap<>(shop.shopItems);
         map.keySet().removeAll(disabled);
-        return new BukkitView<>(NormalShopView.class, new PlayerShop(shop, player, map));
+
+        Class<? extends View<PlayerShop>> viewClass = NormalShopView.class;
+        if (shop.viewType != null){
+            viewClass = classGenerator.generateViewWithTemplate(shop.viewType, NormalShopView.class);
+        }
+        return new BukkitView<>(viewClass, new PlayerShop(shop, player, map));
     }
 
 }

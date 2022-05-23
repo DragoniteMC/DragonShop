@@ -6,7 +6,7 @@
 
     <groupId>com.dragonite.mc</groupId>
     <artifactId>dragonshop</artifactId>
-    <version>0.0.9</version>
+    <version>0.0.10</version>
 
     <properties>
         <maven.compiler.source>18</maven.compiler.source>
@@ -75,8 +75,8 @@
         </dependency>
         <dependency>
             <groupId>org.eldependenci</groupId>
-            <artifactId>eldependenci-framework</artifactId>
-            <version>0.1.7</version>
+            <artifactId>eldependenci-bukkit</artifactId>
+            <version>2.0.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -84,6 +84,11 @@
             <artifactId>eldependenci-mvc</artifactId>
             <version>0.1.4</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.12.10</version>
         </dependency>
     </dependencies>
 

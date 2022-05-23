@@ -1,11 +1,8 @@
 package org.dragonite.mc.testshop;
 
-import me.clip.placeholderapi.PlaceholderAPI;
-import org.dragonitemc.dragonshop.api.RewardTask;
-
 import java.util.List;
 
-public class TestMain {
+public class TestGUI {
 
     public static void main(String[] args) {
         var e = new Exception("2");

@@ -2,7 +2,7 @@ package org.dragonitemc.dragonshop.command;
 
 import com.ericlam.mc.eld.annotations.Commander;
 import com.ericlam.mc.eld.annotations.InjectPool;
-import com.ericlam.mc.eld.components.CommandNode;
+import com.ericlam.mc.eld.bukkit.CommandNode;
 import com.ericlam.mc.eld.configurations.GroupConfig;
 import org.bukkit.command.CommandSender;
 import org.dragonitemc.dragonshop.config.GUITemplate;

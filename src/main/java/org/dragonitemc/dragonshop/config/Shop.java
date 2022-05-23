@@ -19,6 +19,7 @@ public class Shop extends GroupConfiguration {
     // 商店名稱
     public String title = "Unknown Title";
     public String guiType = "normal";
+    public String viewType;
 
     // 商店物品列表
     public Map<String, ShopItemInfo> shopItems = new HashMap<>();

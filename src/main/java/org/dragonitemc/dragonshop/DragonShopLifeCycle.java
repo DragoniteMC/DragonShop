@@ -1,6 +1,6 @@
 package org.dragonitemc.dragonshop;
 
-import com.ericlam.mc.eld.ELDLifeCycle;
+import com.ericlam.mc.eld.bukkit.ELDLifeCycle;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.dragonitemc.dragonshop.api.ShopTaskService;
 import org.dragonitemc.dragonshop.tasks.conditions.FlyingCondition;

@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.dragonitemc.dragonshop.ShopException;
 import org.dragonitemc.dragonshop.api.ShopTaskService;
 import org.dragonitemc.dragonshop.config.Shop;
+import org.dragonitemc.dragonshop.magic.ClassGenerator;
 import org.dragonitemc.dragonshop.services.ShopTaskManager;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +27,10 @@ public abstract class AbstractShopController {
 
     @InjectPool
     protected GroupConfig<Shop> shopConfig;
+
+
+    @Inject
+    protected ClassGenerator classGenerator;
 
     public BukkitView<?, ?> index(Player player, UISession session) {
         Shop shop = session.getAttribute("shop");
