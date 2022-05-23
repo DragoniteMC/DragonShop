@@ -2,25 +2,15 @@ package org.dragonitemc.dragonshop.magic;
 
 import com.ericlam.mc.eldgui.InventoryTemplate;
 import com.ericlam.mc.eldgui.view.UseTemplate;
+import org.dragonitemc.dragonshop.config.GUITemplate;
 
 import java.lang.annotation.Annotation;
 
-public final class DynamicTemplate implements UseTemplate {
-
-    private final String template;
-
-    public DynamicTemplate(String template) {
-        this.template = template;
-    }
-
-    @Override
-    public String template() {
-        return template;
-    }
+public record DynamicTemplate(String template) implements UseTemplate {
 
     @Override
     public Class<? extends InventoryTemplate> groupResource() {
-        return InventoryTemplate.class;
+        return GUITemplate.class;
     }
 
     @Override
