@@ -20,7 +20,7 @@ public final class ClassGenerator {
                 .subclass(originalView)
                 .annotateType(new DynamicTemplate(viewType))
                 .make()
-                .load(originalView.getClassLoader())
+                .load(ClassGenerator.class.getClassLoader())
                 .getLoaded();
         newClassesMap.put(key, newClass);
         return newClass;

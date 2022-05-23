@@ -22,7 +22,7 @@ public class TestByteBuddy {
                 .subclass(original)
                 .annotateType(new DynamicTemplate("test-456"))
                 .make()
-                .load(original.getClassLoader())
+                .load(TestView.class.getClassLoader())
                 .getLoaded();
 
         System.out.println(after.getAnnotation(UseTemplate.class));
