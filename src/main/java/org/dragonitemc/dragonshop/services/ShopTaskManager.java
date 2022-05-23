@@ -29,11 +29,9 @@ public class ShopTaskManager implements ShopTaskService {
     @Inject
     private DragonShopMessage message;
 
-    @Inject
-    private ScheduleService scheduleService;
 
-    @Named("eld-yaml")
     @Inject
+    @Named("eld-yaml")
     private ObjectMapper objectMapper;
 
     private final Map<String, RewardTask<?>> rewardTasks = new ConcurrentHashMap<>();
