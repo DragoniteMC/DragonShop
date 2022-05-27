@@ -32,6 +32,8 @@ public class Shop extends GroupConfiguration {
 
         public int slot;
 
+        public List<Integer> slots;
+
         public int amount;
 
         public int data;

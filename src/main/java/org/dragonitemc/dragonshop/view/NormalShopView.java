@@ -25,22 +25,31 @@ public class NormalShopView implements View<PlayerShop> {
             var itemInfo = entry.getValue();
 
 
-            context.pattern('A')
-                    .component(
-                            itemInfo.slot,
-                            button.icon(itemInfo.material)
-                                    .bind("name", id)
-                                    .setPlaceholderPlayer(player)
-                                    .number(itemInfo.amount)
-                                    .placeholderDisplay(itemInfo.name)
-                                    .placeholderLore(itemInfo.lore)
-                                    .editItem(f -> {
-                                        f.modelData(itemInfo.data);
-                                        f.durability(itemInfo.damage);
-                                        f.unbreakable(itemInfo.damage > 0);
-                                    })
-                                    .create()
-                    );
+            var item = button.icon(itemInfo.material)
+                    .bind("name", id)
+                    .setPlaceholderPlayer(player)
+                    .number(itemInfo.amount)
+                    .placeholderDisplay(itemInfo.name)
+                    .placeholderLore(itemInfo.lore)
+                    .editItem(f -> {
+                        f.modelData(itemInfo.data);
+                        f.durability(itemInfo.damage);
+                        f.unbreakable(itemInfo.damage > 0);
+                    })
+                    .create();
+
+
+            if (itemInfo.slots != null){
+
+                for(int slot : itemInfo.slots){
+                    context.pattern('A').component(slot, item);
+                }
+
+            }else{
+
+                context.pattern('A').component(itemInfo.slot, item);
+
+            }
         });
 
         playerShop.shopItems.entrySet().stream().filter(entry -> entry.getValue().slot == -1).forEach(entry -> {
