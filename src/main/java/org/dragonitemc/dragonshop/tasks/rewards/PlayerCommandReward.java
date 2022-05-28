@@ -5,13 +5,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.dragonitemc.dragonshop.DragonShop;
 import org.dragonitemc.dragonshop.api.RewardTask;
-import org.dragonitemc.dragonshop.model.DelayedCommands;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class PlayerCommandReward extends RewardTask<DelayedCommands> {
+public class PlayerCommandReward extends RewardTask<PlayerCommandReward.DelayedCommands> {
 
     public PlayerCommandReward() {
         super("player-command");
@@ -40,5 +39,10 @@ public class PlayerCommandReward extends RewardTask<DelayedCommands> {
     @Override
     public Type getType() {
         return DelayedCommands.class;
+    }
+
+    public static class DelayedCommands {
+        public long delay;
+        public List<String> commands;
     }
 }
