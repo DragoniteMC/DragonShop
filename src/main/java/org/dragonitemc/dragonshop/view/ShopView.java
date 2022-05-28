@@ -1,5 +1,6 @@
 package org.dragonitemc.dragonshop.view;
 
+import com.ericlam.mc.eldgui.component.Component;
 import com.ericlam.mc.eldgui.view.UIContext;
 import org.bukkit.entity.Player;
 import org.dragonitemc.dragonshop.component.PlaceholderItemFactory;
@@ -7,6 +8,7 @@ import org.dragonitemc.dragonshop.config.Shop;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public abstract class ShopView {
 
@@ -19,7 +21,7 @@ public abstract class ShopView {
             var itemInfo = entry.getValue();
 
 
-            var item = button.icon(itemInfo.material)
+            Supplier<Component> item = () -> button.icon(itemInfo.material)
                     .bind("name", id)
                     .setPlaceholderPlayer(player)
                     .number(itemInfo.amount)
@@ -36,12 +38,12 @@ public abstract class ShopView {
             if (itemInfo.slots != null) {
 
                 for (int slot : itemInfo.slots) {
-                    context.pattern('A').component(slot, item);
+                    context.pattern('A').component(slot, item.get());
                 }
 
             } else {
 
-                context.pattern('A').component(itemInfo.slot, item);
+                context.pattern('A').component(itemInfo.slot, item.get());
 
             }
         });
