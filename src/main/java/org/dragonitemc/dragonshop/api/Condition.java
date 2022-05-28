@@ -2,7 +2,7 @@ package org.dragonitemc.dragonshop.api;
 
 import org.bukkit.entity.Player;
 
-public abstract class Condition<T> {
+public abstract class Condition<T> implements ShopTask {
 
     private final String name;
 

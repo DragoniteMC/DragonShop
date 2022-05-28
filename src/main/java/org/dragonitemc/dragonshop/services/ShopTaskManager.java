@@ -2,8 +2,6 @@ package org.dragonitemc.dragonshop.services;
 
 import com.ericlam.mc.eld.misc.DebugLogger;
 import com.ericlam.mc.eld.services.LoggingService;
-import com.ericlam.mc.eld.services.ScheduleService;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -155,14 +153,7 @@ public class ShopTaskManager implements ShopTaskService {
     }
 
     private <T> CompletableFuture<Void> doRollback(Player player, PriceTask<T> task, Object content) {
-        T price;
-        if (content != null){
-            var jt = objectMapper.constructType(new TypeReference<T>() {
-            }.getType());
-            price = objectMapper.convertValue(content, jt);
-        }else{
-            price = null;
-        }
+        T price = convertValue(task, content);
         if (task instanceof AsyncPriceTask<T> at) {
             return at.doRollBackAsync(price, player);
         } else {
@@ -173,36 +164,23 @@ public class ShopTaskManager implements ShopTaskService {
 
 
     private <T> CompletableFuture<PurchaseResult> doPurchase(Player player, PriceTask<T> task, Object content) {
-        var jt = objectMapper.constructType(new TypeReference<T>() {
-        }.getType());
         try {
-            T price;
-            if (content != null){
-                price = objectMapper.convertValue(content, jt);
-            }else{
-                price = null;
-            }
+            T price = convertValue(task, content);
             if (task instanceof AsyncPriceTask<T> at) {
                 return at.doPurchaseAsync(price, player);
             } else {
                 var result = task.doPurchase(price, player);
                 return CompletableFuture.completedFuture(result);
             }
-        } catch (IllegalArgumentException e) {
-            logger.warn("cannot convert value from {0} to {1} in price task {2}: {3}", content, jt, task.getName(), e.getMessage());
-            throw new ShopException("設置錯誤", "無法把價格類型 " + task.getName() + " 轉換成: " + jt.getRawClass().getSimpleName());
+        } catch (IllegalArgumentException | ClassCastException e) {
+            throw toException("價格", task, e, content);
         }
     }
 
     private <T> CompletableFuture<Void> doReward(Player player, RewardTask<T> task, Object content) {
-        var jt = objectMapper.constructType(new TypeReference<T>() {}.getType());
+
         try {
-            T reward;
-            if (content != null){
-                reward = objectMapper.convertValue(content, jt);
-            } else {
-                reward = null;
-            }
+            T reward = convertValue(task, content);
             if (task instanceof AsyncRewardTask<T> at) {
                 return at.giveRewardAsync(reward, player);
             } else {
@@ -210,9 +188,8 @@ public class ShopTaskManager implements ShopTaskService {
                 return CompletableFuture.completedFuture(null);
             }
 
-        } catch (IllegalArgumentException e) {
-            logger.warn("cannot convert value from {0} to {1} in price task {2}: {3}", content, jt, task.getName(), e.getMessage());
-            throw new ShopException("設置錯誤", "無法把獎勵類型 " + task.getName() + " 轉換成: " + jt.getRawClass().getSimpleName());
+        } catch (IllegalArgumentException | ClassCastException e) {
+           throw toException("獎勵", task, e, content);
         }
     }
 
@@ -271,15 +248,36 @@ public class ShopTaskManager implements ShopTaskService {
         return disabled;
     }
 
-    @SuppressWarnings("unchecked")
     private <T> boolean checkIsMatched(Condition<T> condition, Object content, Player player) {
         try {
-            var cond = (T) content;
+            T cond = convertValue(condition, content);
             return condition.isMatched(cond, player);
         } catch (ClassCastException e) {
             throw new ShopException("設置錯誤", "條件類型 " + condition.getName() + " 不接受這個類型: " + content.getClass().getName());
         }
     }
 
+
+    @SuppressWarnings("unchecked")
+    private <T> T convertValue(ShopTask mapper, Object content) {
+        if (content == null) return null;
+        if (mapper.getType() == null) {
+            return (T) content;
+        } else {
+            var jt = objectMapper.getTypeFactory().constructType(mapper.getType());
+            return objectMapper.convertValue(content, jt);
+        }
+    }
+
+
+    private ShopException toException(String title, ShopTask task, Exception e, Object content) {
+        if (task.getType() != null) {
+            logger.warn("cannot convert value from {0} to {1} in price task {2}: {3}", content, task.getType(), task.getName(), e.getMessage());
+            return new ShopException("設置錯誤", "無法把" + title + " 類型 " + task.getName() + " 轉換成: " + task.getType());
+        } else {
+            logger.warn("cannot convert value {0} in price task {1}: {2}, have you implemented getType() ?", content, task.getName(), e.getMessage());
+            return new ShopException("設置錯誤", "無法轉換" + title + "類型 " + task.getName() + " 的值: " + content);
+        }
+    }
 
 }

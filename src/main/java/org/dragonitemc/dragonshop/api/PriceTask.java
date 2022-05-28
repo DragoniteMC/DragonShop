@@ -2,7 +2,7 @@ package org.dragonitemc.dragonshop.api;
 
 import org.bukkit.entity.Player;
 
-public abstract class PriceTask<T> {
+public abstract class PriceTask<T> implements ShopTask {
 
     private final String name;
 
