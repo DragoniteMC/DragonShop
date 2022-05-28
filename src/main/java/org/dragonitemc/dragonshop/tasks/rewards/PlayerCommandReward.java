@@ -6,7 +6,9 @@ import org.bukkit.entity.Player;
 import org.dragonitemc.dragonshop.DragonShop;
 import org.dragonitemc.dragonshop.api.RewardTask;
 import org.dragonitemc.dragonshop.model.DelayedCommands;
+import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class PlayerCommandReward extends RewardTask<DelayedCommands> {
@@ -32,5 +34,11 @@ public class PlayerCommandReward extends RewardTask<DelayedCommands> {
             line = PlaceholderAPI.setPlaceholders(player, line);
             player.chat("/" + line);
         }
+    }
+
+    @Nullable
+    @Override
+    public Type getType() {
+        return DelayedCommands.class;
     }
 }
